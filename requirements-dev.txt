@@ -1,0 +1,17 @@
+# dev
+epc
+mypy
+importmagic
+neovim
+ipython
+ipdb
+pylint
+flake8
+
+# tests
+pytest
+pytest-mypy
+pytest-cov
+pytest-pylint
+pytest-mock
+pytest-env
