@@ -34,6 +34,7 @@ class RedisSetFilter:
 
         Redis store stings as raw data, and we need decode them back
         https://stackoverflow.com/q/10599147/1376206
+        :returns: set -- set of items in redis structure
         """
         return set([x.decode('utf-8') for x in self.db.smembers(self.name)])
 
@@ -87,9 +88,10 @@ class RedisBucketFilter:
     """Redis filter with buckets to filter huge volumes of data when just one
     key isn't enoughr. limitation of set data strucure in redis about 4 bil.
 
-    Bucket number calculated as first `bucket_digits` from murmur3 hash of value
+    Bucket number calculated as first `bucket_digits` from murmur3 hash
 
-    >> mmh3.hash('B10E7oDEO6-', signed=False).to_bytes(4, byteorder='big').hex()
+    >> mmh3.hash('B10E7oDEO6-', signed=False).to_bytes(
+    >>           4, byteorder='big').hex()
     """
 
     __slots__ = [

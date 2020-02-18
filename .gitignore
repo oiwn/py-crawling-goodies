@@ -130,3 +130,5 @@ dmypy.json
 
 # project
 .tmuxp.yaml
+.pylintrc
+mypy.ini
