@@ -46,6 +46,14 @@ class RedisJsonLIFOQueue:
         """
         return len(self) == 0
 
+    def exists(self, name: str) -> bool:
+        """Check if queue key exist exists
+
+        :param value: check if value present in set
+        :returns: bool -- true if exists
+        """
+        return bool(self.db.exists(name))
+
     def put(self, item: dict) -> int:
         """Put item into the queue.
 

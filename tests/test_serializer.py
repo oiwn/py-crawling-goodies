@@ -15,8 +15,8 @@ def test_item_serializer():
     assert s.serializer == 'json'
 
     # check functons type
-    assert s.loads == json.loads
-    assert s.dumps == json.dumps
+    assert s._loads == json.loads
+    assert s._dumps == json.dumps
 
     # check functions
     assert s.loads('{"a": 1}') == {'a': 1}
@@ -31,5 +31,5 @@ def test_item_serializer():
     assert s.serializer == 'bson'
 
     # check functions type
-    assert s.loads == bson.loads
-    assert s.dumps == bson.dumps
+    assert s._loads == bson.BSON.decode
+    assert s._dumps == bson.BSON.encode

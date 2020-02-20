@@ -4,8 +4,8 @@ import importlib
 class ItemSerializer(object):
     __slots__ = {
         '__serializer',
-        '__loads',
-        '__dumps'
+        '_loads',
+        '_dumps'
     }
 
     @property
@@ -23,18 +23,19 @@ class ItemSerializer(object):
         """
         assert serializer in ['json', 'ujson', 'rapidjson',
                               'bson.json_util', 'bson']
+
         self.__serializer = serializer
         _importer = importlib.import_module
 
         if self.__serializer == 'bson':
-            self.__loads = _importer(self.__serializer).BSON.decode
-            self.__dumps = _importer(self.__serializer).BSON.encode
+            self._loads = _importer(self.__serializer).BSON.decode
+            self._dumps = _importer(self.__serializer).BSON.encode
         else:
-            self.__loads = _importer(self.__serializer).loads
-            self.__dumps = _importer(self.__serializer).dumps
+            self._loads = _importer(self.__serializer).loads
+            self._dumps = _importer(self.__serializer).dumps
 
     def loads(self, item):
-        return self.__loads(item)
+        return self._loads(item)
 
     def dumps(self, item):
-        return self.__dumps(item)
+        return self._dumps(item)
