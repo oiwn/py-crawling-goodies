@@ -66,27 +66,33 @@ class RedisJsonLIFOQueue:
         # last result contains len of queue after operations
         return res[-1] == self.__len__()
 
-    def get(self, block=True, timeout=None) -> dict:
+    def get(self) -> dict:
+        """Pop first element from the list
+        :returns: dict - serialized item
+        """
+        item = self.db.lpop(self.name)
+        if item is None:
+            return None
+        return self.serializer.loads(item)
+
+    def get_block(self, timeout=None) -> dict:
         """Pop item from the queue.
 
         If optional args block is true and timeout is None (the default), block
         if necessary until an item is available."""
-        if block:
-            item = self.db.blpop(self.key, timeout=timeout)
-        else:
-            item = self.db.lpop(self.key)
+        item = self.db.blpop(self.name, timeout=timeout)
 
+        # return self.serializer.loads(item)
         if item:
-            item = item[1]
-
-        return self.serializer.loads(item)
+            return self.serializer.loads(item[1])
+        return None
 
     def get_bulk(self, number_of_items) -> List[dict]:
         """Remove and return part of list from queue
         """
         items_list = []
         for num in range(number_of_items):
-            item = self.db.lpop(self.key)
+            item = self.db.lpop(self.name)
 
             if item:
                 items_list.append(self.serializer.loads(item))
@@ -94,9 +100,12 @@ class RedisJsonLIFOQueue:
                 break
         return items_list
 
-    def get_nowait(self):
-        """Equivalent to get(False)."""
-        return self.get(False)
+    def sizeof(self) -> int:
+        """Size of data structure in redis
+
+        :returns: int -- memory used in bytes
+        """
+        return self.db.memory_usage(self.name, samples=0)
 
     def __len__(self) -> int:
         """Queue length.
