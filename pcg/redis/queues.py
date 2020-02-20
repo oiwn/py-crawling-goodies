@@ -1,7 +1,7 @@
 from typing import List
 
 import redis
-from py_crawling_goodies.common import ItemSerializer
+from pcg.common import ItemSerializer
 
 
 class RedisJsonLIFOQueue:

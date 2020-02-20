@@ -1,6 +1,6 @@
 import redis
 import pytest
-from py_crawling_goodies.redis.filters import RedisSetFilter, RedisBucketFilter
+from pcg.redis.filters import RedisSetFilter, RedisBucketFilter
 
 
 @pytest.fixture(scope='function')
