@@ -1,24 +1,14 @@
 import redis
-import pytest
+
 from pcg.redis.filters import RedisSetFilter, RedisBucketFilter
+from tests.fixtures import redis_db
 
 
-@pytest.fixture(scope='function')
-def redis_db():
-    """Test that we're using testing redis database,
-    load function level fixture, ensure
-    database will be flushed after execution of the test function"""
-    db_uri = 'redis://localhost:6379/15'
-    r = redis.from_url(db_uri)
-
-    assert r.ping() is True
-    yield r
-
-    r.flushdb()
+rdb = redis_db
 
 
-def test_redis_set_filter(redis_db):
-    f = RedisSetFilter('pcg:test-set', r=redis_db)
+def test_redis_set_filter(rdb):
+    f = RedisSetFilter('pcg:test-set', r=rdb)
 
     # check db property
     assert isinstance(f.db, redis.client.Redis)
