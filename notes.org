@@ -1,0 +1,6 @@
+#+TITLE: PCG notes
+
+* ToDo
+** Integrate with Travis-CI
+** Redis queue with priorities
+** Celery base class for HTTP task
