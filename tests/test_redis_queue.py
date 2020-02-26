@@ -1,6 +1,6 @@
 import redis
 
-from pcg.redis.queues import RedisJsonLIFOQueue
+from pcg import RedisJsonLIFOQueue
 from tests.fixtures import redis_db
 
 

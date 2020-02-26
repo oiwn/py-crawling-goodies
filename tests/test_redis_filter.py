@@ -1,6 +1,6 @@
 import redis
 
-from pcg.redis.filters import RedisSetFilter, RedisBucketFilter
+from pcg import RedisSetFilter, RedisBucketFilter
 from tests.fixtures import redis_db
 
 

@@ -16,20 +16,44 @@ Helpers and stuff for building web crawlers.
 
 ```python
 import redis
-from pcg.redis.filters import RedisSetFilter
+from pcg import RedisSetFilter
 
 db = redis.from_url('redis://localhost:6379/15')
 f = RedisSetFilter('pcg:set-filter', r=db)
 
 # adding elements to filter
 f.add('bob')
-f.add('alice', 'jane')
+assert f.add('alice', 'jane') == 2
 
 # delete element
 f.remove('jane')
 
 if f.exists('alice'):
     print('Alice already there!')
+
+if not f.exists('jane'):
+    print('Jane not yet come!')
+```
+
+### RedisBucketFilter
+
+```python
+import redis
+
+from pcg import RedisBucketFilter
+
+db = redis.from_url('redis://localhost:6379/15')
+f = RedisBucketFilter('pcg:bucket-filter', r=db)
+
+# adding elements to filter
+f.add('alice')
+assert f.add('bob', 'jane') == 2
+
+# delete element
+f.remove('jane')
+
+if f.exists('bob'):
+    print('Bob already there!')
 
 if not f.exists('jane'):
     print('Jane not yet come!')
