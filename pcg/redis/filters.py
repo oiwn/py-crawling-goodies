@@ -127,6 +127,14 @@ class RedisBucketFilter:
         bucket = str(mmh3.hash(value, signed=False))[:self.bucket_digits]
         return '{}:{}'.format(self.name, bucket)
 
+    def get_bucket(self, value: str) -> str:
+        """Calculate bucket number from value
+
+        :param value: value
+        :returns: str -- bucket number as string
+        """
+        return str(mmh3.hash(value, signed=False))[:self.bucket_digits]
+
     def info(self) -> dict:
         """Information about buckets and number of elements in them.
 

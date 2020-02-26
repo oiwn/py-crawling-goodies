@@ -49,6 +49,9 @@ def test_redis_bucket_filter(redis_db):
     # check db property
     assert isinstance(f.db, redis.client.Redis)
 
+    # bucket number
+    assert f.get_bucket('original__barbie') == '4'
+
     # add single value
     assert f.add('alice') == 1
     assert f.exists('alice') is True
