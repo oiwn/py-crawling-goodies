@@ -1,18 +1,9 @@
 # dev
 epc
-mypy
 importmagic
 neovim
+mypy
 ipython
 ipdb
 pylint
 flake8
-codecov
-
-# tests
-pytest
-pytest-mypy
-pytest-cov
-pytest-pylint
-pytest-mock
-pytest-env
