@@ -1,6 +1,8 @@
 #+TITLE: PCG notes
 
 * ToDo
-** Integrate with Travis-CI
+** DONE Integrate with Travis-CI
+   CLOSED: [2020-02-27 Thu 04:27]
+** TODO sphinx documentation to readthe docs
 ** Redis queue with priorities
-** Celery base class for HTTP task
+** Celery base class for HTTP task (with tests!)

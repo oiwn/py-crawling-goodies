@@ -10,9 +10,12 @@ Helpers and stuff for building web crawlers.
 
 - `RedisSetFilter` filter based on redis set.
 - `RedisBucketFilter` filter which 'shard' values over few sets.
+- `RedisJsonLIFOQueue` LIFO queue based on redis
 
 
 ### RedisSetFilter
+
+Trivial implementation of filter using redis set datatype
 
 ```python
 import redis
@@ -36,6 +39,8 @@ if not f.exists('jane'):
 ```
 
 ### RedisBucketFilter
+
+Split filter into the buckets, based on murmur hash.
 
 ```python
 import redis
