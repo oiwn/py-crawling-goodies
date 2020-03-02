@@ -5,6 +5,13 @@
 
 Helpers and stuff for building web crawlers.
 
+# Installation
+
+```bash
+
+pip install git+https://github.com/istinspring/py-crawling-goodies.git
+```
+
 
 ## Redis
 

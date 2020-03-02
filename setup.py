@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="py-crawling-goodies",
-    version="0.0.1",
+    version="0.0.2",
     author="istinspring",
     author_email="istinspring@yandex.com",
     description="Collection of tools usefult in web scraping",
