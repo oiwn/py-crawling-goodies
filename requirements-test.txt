@@ -5,3 +5,4 @@ pytest-cov
 # pytest-pylint
 pytest-mock
 pytest-env
+requests_mock
