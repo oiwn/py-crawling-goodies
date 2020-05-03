@@ -36,7 +36,7 @@ def test_redis_set_filter(rdb):
     # data structure in memory size
     f.add('many', 'other', 'people', 'walking', 'around')
     assert len(f) == 7
-    assert f.sizeof() > 400
+    assert f.sizeof() > 300
 
     # check str
     assert 'RedisSetFilter' in str(f)
@@ -73,7 +73,7 @@ def test_redis_bucket_filter(redis_db):
     # data structure in memory size
     f.add('dome', 'roland', 'krot', 'bes', 'paperclip')
     assert len(f) == 8
-    assert f.sizeof() > 800
+    assert f.sizeof() > 300
 
     # check info about buckets
     assert len(f.info()) == 5

@@ -1,7 +1,5 @@
 # dev
-epc
-importmagic
-neovim
+pynvim
 mypy
 ipython
 ipdb

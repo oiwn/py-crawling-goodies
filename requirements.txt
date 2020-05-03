@@ -1,5 +1,4 @@
 mmh3
 redis
-celery
 pymongo
 requests
