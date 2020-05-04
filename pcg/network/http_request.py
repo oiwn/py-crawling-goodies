@@ -13,7 +13,7 @@ DEFAULT_CONFIG = {
     "request_timeout": 10,
     "request_backoff_timeout": 1,
     "request_retries": 3,
-    "request_sleep_on_error_time": 5,
+    "request_sleep_on_error_time": 1,
     "change_proxy_on_retry": True,
     "change_ua_on_retry": True,
 }
@@ -33,8 +33,11 @@ class HTTPRequestEvents:
     def on_success(self, res):
         """On request success"""
 
-    def on_fail(self, req, exc):
-        """On request fail"""
+    def on_fail(self, req, res):
+        """On request fail (on server side)"""
+
+    def on_exception(self, req, exc):
+        """On request exception"""
 
 
 class HTTPRequest:
@@ -84,7 +87,7 @@ class HTTPRequest:
         """
 
         backoff_timer = 0  # increase sleep time after each fail
-        prepped = req.prepare()
+        prepped = self.session.prepare_request(req)
 
         res = None
         for idx, _ in enumerate(range(self.config['request_retries'])):
@@ -98,12 +101,12 @@ class HTTPRequest:
                 res = self.session.send(prepped)
             except requests.exceptions.RequestException as exc:
                 self.errors.append({'exception': exc, 'response': res})
-                self.events.on_fail(req, exc)
+                self.events.on_exception(req, exc)
                 continue
             else:
                 if not res.ok:
                     self.errors.append({'exception': None, 'response': res})
-                    self.events.on_fail(req, None)
+                    self.events.on_fail(req, res)
 
                     backoff_timer = self.backoff_timeout(backoff_timer)
                     time.sleep(backoff_timer)
