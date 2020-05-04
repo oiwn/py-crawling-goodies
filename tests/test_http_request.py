@@ -3,7 +3,7 @@ import time
 from requests import Request
 import requests_mock  # type: ignore
 
-from pcg.celery.httptask import HTTPRequest, HTTPRequestEvents
+from pcg.network.http_request import HTTPRequest, HTTPRequestEvents
 
 
 def test_http_request():
