@@ -45,9 +45,6 @@ class HTTPRequest:
     for common functions to work with HTTP requests
     """
 
-    config: Dict = {}
-    errors: List[Dict] = []
-
     def __init__(self, config=None, headers=None, events=None):
         # create session according to config
         self.session = requests.Session()
@@ -65,6 +62,8 @@ class HTTPRequest:
         else:
             self.events = HTTPRequestEvents()
 
+        self.errors = []
+
     def last_error(self):
         """Retrun last error"""
         return self.errors[-1] if len(self.errors) > 0 else None
@@ -75,7 +74,7 @@ class HTTPRequest:
         new_timeout = timeout + self.config['request_backoff_timeout']
         return new_timeout
 
-    def repeat_request(self, req: requests.Request):
+    def repeat_request(self, req: requests.Request, proxies=None):
         """Repeat request according to request config.
 
         NOTE: out of the box solution
@@ -100,7 +99,7 @@ class HTTPRequest:
 
             self.events.on_send()
             try:
-                res = self.session.send(prepped)
+                res = self.session.send(prepped, proxies=proxies)
             except requests.exceptions.RequestException as exc:
                 self.errors.append({'__type': 'exception',
                                     'exception': exc,

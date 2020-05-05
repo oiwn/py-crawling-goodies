@@ -206,4 +206,3 @@ def test_errors():
         assert len(http.errors) == 3
         assert http.last_error()['__type'] == 'exception'
         assert http.last_error()['exception'].response is None
-
