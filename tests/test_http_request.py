@@ -183,3 +183,27 @@ def test_user_agent():
 
         assert res.ok is True
         assert res.request.headers['user-agent'].startswith('python-requests')
+
+
+def test_errors():
+    http = HTTPRequest(
+        config={
+            'request_backoff_timeout': 0.1,
+            'request_retries': 3,
+            'change_ua_on_retry': False
+        },
+    )
+
+    with requests_mock.Mocker() as req_mock:
+        req_mock.register_uri(
+            'GET', 'http://somedummydomain.com',
+            exc=requests.exceptions.ConnectTimeout)
+
+        res = http.repeat_request(
+            Request('GET', 'http://somedummydomain.com'))
+
+        assert res is None
+        assert len(http.errors) == 3
+        assert http.last_error()['__type'] == 'exception'
+        assert http.last_error()['exception'].response is None
+

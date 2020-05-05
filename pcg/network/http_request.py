@@ -87,6 +87,8 @@ class HTTPRequest:
         """
 
         backoff_timer = 0  # increase sleep time after each fail
+        self.errors = []  # drop errors from previous call
+
         prepped = self.session.prepare_request(req)
 
         res = None
@@ -100,12 +102,18 @@ class HTTPRequest:
             try:
                 res = self.session.send(prepped)
             except requests.exceptions.RequestException as exc:
-                self.errors.append({'exception': exc, 'response': res})
+                self.errors.append({'__type': 'exception',
+                                    'exception': exc,
+                                    'request': req,
+                                    'response': res})
                 self.events.on_exception(req, exc)
                 continue
             else:
                 if not res.ok:
-                    self.errors.append({'exception': None, 'response': res})
+                    self.errors.append({'__type': 'http',
+                                        'exception': None,
+                                        'response': res,
+                                        'request': None})
                     self.events.on_fail(req, res)
 
                     backoff_timer = self.backoff_timeout(backoff_timer)
