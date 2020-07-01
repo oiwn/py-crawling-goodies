@@ -9,7 +9,7 @@ Helpers and stuff for building web crawlers.
 
 ```bash
 
-pip install git+https://github.com/istinspring/py-crawling-goodies.git
+pip install py-crawling-goodies
 ```
 
 
