@@ -8,12 +8,12 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="py-crawling-goodies",
     version="0.0.2",
-    author="istinspring",
-    author_email="istinspring@yandex.com",
+    author="oiwn",
+    author_email="",
     description="Collection of tools usefult in web scraping",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/istinspring/py-crawling-goodies",
+    url="https://github.com/oiwn/py-crawling-goodies",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
