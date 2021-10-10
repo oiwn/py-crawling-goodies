@@ -4,5 +4,5 @@ mypy
 ipython
 ipdb
 pylint
-flake8
 black
+pymongo-stubs

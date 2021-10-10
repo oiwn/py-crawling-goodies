@@ -1,5 +1,1 @@
-mmh3
-redis
-pymongo
-requests
-user_agent
+pyyaml
