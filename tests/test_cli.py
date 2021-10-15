@@ -35,8 +35,8 @@ def test_cli(tmp_path):
         class TestCommandLineInterface(CommandLineInterface):
             """Test cli"""
 
-            def get_root_folder(self):
-                return str(tmp_path)
+            def get_commands_folder(self, ctx):
+                return str(command_dir)
 
         @click.command(cls=TestCommandLineInterface)
         @click.option("--conf", default="dev", help="config")
@@ -45,8 +45,5 @@ def test_cli(tmp_path):
 
         result = runner.invoke(cli)
 
-    #  print(result.stderr)
-    print(result.exception)
-    print(dir(result))
-    #  assert result.exit_code == 0
-    #  assert result.output == "Hello"
+    assert "Test file" in result.output
+    assert result.exit_code == 0

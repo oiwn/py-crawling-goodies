@@ -1,4 +1,4 @@
 """Keep imports easy"""
 # flake8: noqa
-from .app import App, AppRedisMixin, AppMongoMixin
+from .app import App
 from .patterns.singleton import Singleton

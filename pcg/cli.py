@@ -3,7 +3,6 @@ separated files"""
 # pylint: disable=no-self-use
 import os
 import pathlib
-import importlib
 
 import click
 
@@ -15,12 +14,11 @@ class CommandLineInterface(click.MultiCommand):
     """
 
     _default_command_prefix = "cmd_"
+    _root_folder = pathlib.Path().resolve()
 
     def get_root_folder(self, ctx):
         """Return current app root, redefine to change"""
-        root_folder = ctx.meta.get(
-            "project_root_folder", pathlib.Path().resolve()
-        )
+        root_folder = ctx.meta.get("project_root_folder", self._root_folder)
         return root_folder
 
     def get_commands_folder(self, ctx):
@@ -38,13 +36,13 @@ class CommandLineInterface(click.MultiCommand):
         """Iterate throuth the commands folder and collect all files
         with `cmd_` prefix and `.py` extension
         """
+        print(self.get_root_folder(ctx))
         commands = []
         cmd_prefix = self.get_command_prefix()
         for filename in os.listdir(self.get_commands_folder(ctx)):
             if filename.endswith(".py") and filename.startswith(cmd_prefix):
                 commands.append(filename[len(cmd_prefix) : -len(".py")])
         commands.sort()
-        print(commands)
         return commands
 
     def get_command(self, ctx, cmd_name):
@@ -56,17 +54,21 @@ class CommandLineInterface(click.MultiCommand):
         I.e. move required imports inside the function with
         command implementation.
         """
-        print(self.get_commands_folder(ctx))
         namespace = {}
-        command_file_name = os.path.join(
-            self.get_commands_folder(ctx), cmd_name + ".py"
+        command_file_path = os.path.join(
+            self.get_commands_folder(ctx),
+            self.get_command_prefix() + cmd_name + ".py",
         )
-        with open(command_file_name) as command_file:
-            code = compile(command_file.read(), command_file, "exec")
+        with open(command_file_path) as command_file:
+            code = compile(command_file.read(), command_file_path, "exec")
             eval(code, namespace, namespace)  # pylint: disable=eval-used
-        return namespace["cli"]
-        #  mod = importlib.import_module(f"{self.get_commands_folder}.cmd_{name}")
-        #  mod = __import__(
-        #      f"{self.get_commands_folder()}.cmd_{name}", None, None, ["cmd"]
-        #  )
-        #  return mod.cmd
+        return namespace["cmd"]
+
+
+def plugins_cli_factory(root_folder):
+    """Create CLI class with root folder setted"""
+    return type(
+        "PluginCommandsCLI",
+        (CommandLineInterface,),
+        {"_root_folder": root_folder},
+    )
