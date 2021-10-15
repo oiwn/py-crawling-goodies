@@ -6,3 +6,4 @@ ipdb
 pylint
 black
 pymongo-stubs
+types-PyYAML

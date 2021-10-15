@@ -1,11 +1,12 @@
 """Base class and mixins to build App instance"""
 # pylint: disable=import-outside-toplevel,no-self-use
-# pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods,ungrouped-imports
 import uuid
 import logging
 import functools
 import logging.config
 from typing import Dict, Optional
+from unittest.mock import Mock
 
 import yaml
 
@@ -13,13 +14,13 @@ try:
     import redis
 except ImportError:
     # skip import error if redis-py not installed
-    pass
+    redis = Mock()
 
 try:
     import pymongo
 except ImportError:
     # skip import error is pymongo not installed
-    pass
+    pymongo = Mock()
 
 
 from pcg.patterns import Singleton

@@ -1,3 +1,4 @@
+"""Test application helper"""
 # pylint: disable=missing-class-docstring
 import logging
 from pcg.app import App, AppRedisMixin, AppMongoMixin
