@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="py-crawling-goodies",
-    version="0.0.2",
+    version="0.0.3",
     author="oiwn",
     author_email="",
     description="Collection of tools usefult in web scraping",
@@ -20,5 +20,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
+    python_requires=">=3.6",
 )
