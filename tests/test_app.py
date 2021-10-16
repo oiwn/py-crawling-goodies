@@ -1,7 +1,8 @@
 """Test application helper"""
 # pylint: disable=missing-class-docstring
 import logging
-from pcg.app import App, AppRedisMixin, AppMongoMixin
+from pcg.app import App
+from pcg.app_mixins import AppRedisMixin, AppMongoMixin
 
 
 DEFAULT_CONFIG = """
@@ -9,7 +10,7 @@ DEFAULT_CONFIG = """
         name: test
         debug: true
     redis:
-        uri: redis://localhost:6379/4
+        uri: redis://localhost:6379/15
     mongodb:
         uri: mongodb://localhost:27017/ig
     logging:
@@ -22,7 +23,7 @@ DEFAULT_CONFIG = """
                 class: logging.StreamHandler
                 level: DEBUG
                 formatter: simple
-                stream: ext://sys.stdout
+                stream: ext://sys.stderr
         loggers:
             app.test:
                 level: INFO
@@ -81,9 +82,8 @@ def test_app_setup_logging(tmp_path, caplog):
     config_file.write_text(DEFAULT_CONFIG)
     app = BasicApp.from_config(str(config_file))
 
-    logger = logging.getLogger("app.test")
     app.setup_logging()
-    print(logger.propagate)
+    logger = logging.getLogger("app.test")
 
     logger.info("Hello")
     logger.error("Wrong!")
@@ -102,3 +102,18 @@ def test_app_mongodb_mixin(tmp_path):
     app = BasicApp.from_config(str(config_file))
 
     assert app.config["app"]["name"] == "test"
+    assert app.check_mongo_availability(app.config["mongodb"]["uri"]) is True
+
+
+def test_app_redis_mixin(tmp_path):
+    """Test app mixin - redis"""
+
+    class BasicApp(App, AppRedisMixin):
+        pass
+
+    config_file = tmp_path / "test_conf.yaml"
+    config_file.write_text(DEFAULT_CONFIG)
+    app = BasicApp.from_config(str(config_file))
+
+    assert app.config["app"]["name"] == "test"
+    assert app.check_redis_availability(app.config["redis"]["uri"]) is True

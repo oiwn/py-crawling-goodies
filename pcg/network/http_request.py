@@ -5,7 +5,8 @@ import logging
 from typing import Optional, List, Dict
 
 import requests
-from user_agent import generate_user_agent  # type: ignore
+
+#  from user_agent import generate_user_agent  # type: ignore
 
 
 logger = logging.getLogger(__name__)
@@ -17,6 +18,10 @@ DEFAULT_CONFIG = {
     "change_proxy_on_retry": True,
     "change_ua_on_retry": True,
 }
+
+
+def generate_user_agent():
+    return "android"
 
 
 class HTTPRequestEvents:
@@ -71,7 +76,7 @@ class HTTPRequest:
     def backoff_timeout(self, timeout):
         """Return new timeout with added backoff time.
         """
-        new_timeout = timeout + self.config['request_backoff_timeout']
+        new_timeout = timeout + self.config["request_backoff_timeout"]
         return new_timeout
 
     def repeat_request(self, req: requests.Request, proxies=None):
@@ -91,28 +96,36 @@ class HTTPRequest:
         prepped = self.session.prepare_request(req)
 
         res = None
-        for idx, _ in enumerate(range(self.config['request_retries'])):
+        for idx, _ in enumerate(range(self.config["request_retries"])):
             if idx > 0:  # if not first request
                 # change user agent
-                if self.config['change_ua_on_retry']:
-                    prepped.headers['user-agent'] = generate_user_agent()
+                if self.config["change_ua_on_retry"]:
+                    prepped.headers["user-agent"] = generate_user_agent()
 
             self.events.on_send()
             try:
                 res = self.session.send(prepped, proxies=proxies)
             except requests.exceptions.RequestException as exc:
-                self.errors.append({'__type': 'exception',
-                                    'exception': exc,
-                                    'request': req,
-                                    'response': res})
+                self.errors.append(
+                    {
+                        "__type": "exception",
+                        "exception": exc,
+                        "request": req,
+                        "response": res,
+                    }
+                )
                 self.events.on_exception(req, exc)
                 continue
             else:
                 if not res.ok:
-                    self.errors.append({'__type': 'http',
-                                        'exception': None,
-                                        'response': res,
-                                        'request': None})
+                    self.errors.append(
+                        {
+                            "__type": "http",
+                            "exception": None,
+                            "response": res,
+                            "request": None,
+                        }
+                    )
                     self.events.on_fail(req, res)
 
                     backoff_timer = self.backoff_timeout(backoff_timer)

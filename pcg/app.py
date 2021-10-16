@@ -1,26 +1,12 @@
-"""Base class and mixins to build App instance"""
+"""Base class with sane defaults to build App instance"""
 # pylint: disable=import-outside-toplevel,no-self-use
 # pylint: disable=too-few-public-methods,ungrouped-imports
 import uuid
 import logging
-import functools
 import logging.config
 from typing import Dict, Optional
-from unittest.mock import Mock
 
 import yaml
-
-try:
-    import redis
-except ImportError:
-    # skip import error if redis-py not installed
-    redis = Mock()
-
-try:
-    import pymongo
-except ImportError:
-    # skip import error is pymongo not installed
-    pymongo = Mock()
 
 
 from pcg.patterns import Singleton
@@ -91,30 +77,3 @@ class App(metaclass=Singleton):
 
         if verbose:
             logging.basicConfig(level=logging.DEBUG)
-
-
-class AppMongoMixin:
-    """Add connection to mongodb"""
-
-    @functools.lru_cache()
-    def get_mongo_client(self, uri: str) -> pymongo.mongo_client.MongoClient:
-        """Return mongodb client"""
-        return pymongo.MongoClient(uri, connect=False)
-
-    @functools.lru_cache()
-    def get_mongo_db(self, uri: str) -> pymongo.database.Database:
-        """Return mongodb database object"""
-        return self.get_mongo_client(uri).get_database()
-
-    def check_mongo_availability(self, uri: str):
-        """Check if mongodb available"""
-
-
-class AppRedisMixin:
-    """Add redis database connection"""
-
-    @staticmethod
-    def get_redis_pool(uri) -> redis.client.Redis:
-        """Return redis client"""
-        pool = redis.ConnectionPool.from_url(uri)
-        return redis.Redis(connection_pool=pool)

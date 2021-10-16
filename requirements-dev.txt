@@ -7,3 +7,4 @@ pylint
 black
 pymongo-stubs
 types-PyYAML
+types-requests

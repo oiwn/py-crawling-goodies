@@ -42,6 +42,7 @@ def test_cli(tmp_path):
         @click.option("--conf", default="dev", help="config")
         def cli(conf):
             """Command line interface entry point"""
+            assert conf == "dev"
 
         result = runner.invoke(cli)
 
