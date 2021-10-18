@@ -42,7 +42,7 @@ class AppRedisMixin:
     def get_redis_pool(uri) -> redis.client.Redis:
         """Return redis client"""
         pool = redis.ConnectionPool.from_url(uri)
-        return pool
+        return redis.Redis(connection_pool=pool)
 
     def check_redis_availability(self, uri: str) -> bool:
         """Check if redis server is available"""

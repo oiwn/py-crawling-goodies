@@ -59,6 +59,12 @@ class App(metaclass=Singleton):
 
         self.__app_uuid = uuid.uuid1()  # uuid for current app
 
+        # post initialization
+        self.post_init()
+
+    def post_init(self):
+        """Called when app is initialized, additional code here"""
+
     @staticmethod
     def load_config(fpath: str) -> Dict:
         """Load config from yaml file"""
