@@ -4,7 +4,7 @@
 import uuid
 import logging
 import logging.config
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 
 import yaml
 
@@ -64,6 +64,17 @@ class App(metaclass=Singleton):
 
     def post_init(self):
         """Called when app is initialized, additional code here"""
+
+    def path(self, path: str) -> Any:
+        """Use dotted notation to navigate config"""
+        result: Any
+
+        for index, node in enumerate(path.split(".")):
+            if index == 0:
+                result = self.config[node]
+                continue
+            result = result[node]
+        return result
 
     @staticmethod
     def load_config(fpath: str) -> Dict:

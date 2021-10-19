@@ -72,6 +72,19 @@ def test_app_from_config(tmp_path):
     assert "logging" in app.config
 
 
+def test_app_path_method(tmp_path):
+    """Test simple path selector"""
+
+    class BasicApp(App):
+        pass
+
+    config_file = tmp_path / "test_conf.yaml"
+    config_file.write_text(DEFAULT_CONFIG)
+    app = BasicApp.from_config(str(config_file))
+
+    assert app.path("mongodb.uri") == "mongodb://localhost:27017/ig"
+
+
 def test_app_setup_logging(tmp_path, caplog):
     """Check setup logging"""
 
