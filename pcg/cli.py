@@ -36,7 +36,6 @@ class CommandLineInterface(click.MultiCommand):
         """Iterate throuth the commands folder and collect all files
         with `cmd_` prefix and `.py` extension
         """
-        print(self.get_root_folder(ctx))
         commands = []
         cmd_prefix = self.get_command_prefix()
         for filename in os.listdir(self.get_commands_folder(ctx)):
