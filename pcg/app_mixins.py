@@ -47,6 +47,10 @@ class AppRedisMixin:
     def check_redis_availability(self, uri: str) -> bool:
         """Check if redis server is available"""
         redis_client = redis.from_url(uri)
-        if redis_client.ping():
-            return True
+
+        try:
+            if redis_client.ping():
+                return True
+        except redis.exceptions.ConnectionError:
+            return False
         return False

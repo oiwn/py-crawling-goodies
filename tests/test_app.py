@@ -11,8 +11,9 @@ DEFAULT_CONFIG = """
         debug: true
     redis:
         uri: redis://localhost:6379/15
+        fail: redis://localhost:6000/15
     mongodb:
-        uri: mongodb://localhost:27017/ig
+        uri: mongodb://localhost:27017/test_pcg_db
     logging:
         version: 1
         formatters:
@@ -82,7 +83,7 @@ def test_app_path_method(tmp_path):
     config_file.write_text(DEFAULT_CONFIG)
     app = BasicApp.from_config(str(config_file))
 
-    assert app.path("mongodb.uri") == "mongodb://localhost:27017/ig"
+    assert app.path("mongodb.uri") == "mongodb://localhost:27017/test_pcg_db"
 
 
 def test_app_setup_logging(tmp_path, caplog):
@@ -130,3 +131,6 @@ def test_app_redis_mixin(tmp_path):
 
     assert app.config["app"]["name"] == "test"
     assert app.check_redis_availability(app.config["redis"]["uri"]) is True
+
+    # check fail of redis availablity
+    assert app.check_redis_availability(app.config["redis"]["fail"]) is False
